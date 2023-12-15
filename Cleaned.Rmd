@@ -1,0 +1,222 @@
+---
+title: "Phase 2"
+author: "Shane Hauck"
+date: "2023-12-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo = FALSE}
+library(tidyverse)
+library(gridExtra)
+library(GGally)
+theme_set(theme_bw())
+library(ggpubr)
+```
+
+```{r echo = FALSE}
+vietnam <- read_csv("data/vietnam-health.csv")
+vietnam <- vietnam %>%
+  filter(ReaExam == "volunteer") %>%
+  filter(RecPerExam != "unknow") %>%
+  # filter values from AttractInfo that do not have a decimal
+  filter(!grepl("[.]", AttractInfo)) %>%
+  filter(!grepl("[.]", SuffInfo)) %>%
+  filter(!grepl("[.]", ImpressInfo)) %>%
+  filter(!grepl("[.]", PopularInfo)) %>%
+  filter(!grepl("[.]", Assurance)) %>%
+  filter(!grepl("[.]", Reliability)) %>%
+  filter(!grepl("[.]", Empathy)) %>%
+  mutate(greaterthan12 = case_when(
+    RecPerExam %in% c("b1224", "g24") ~ "yes",
+    TRUE ~ RecPerExam
+  )) %>%
+  mutate(howlong = ifelse(greaterthan12 == "yes", 1, 0)) %>%
+  mutate(AttractInfo = as.factor(AttractInfo),
+                   SuffInfo = as.factor(SuffInfo),
+                   ImpressInfo = as.factor(ImpressInfo),
+                   PopularInfo = as.factor(PopularInfo),
+                   Assurance = as.factor(Assurance),
+                   Reliability = as.factor(Reliability),
+                   Empathy = as.factor(Empathy)) 
+```
+
+
+
+```{r echo = FALSE}
+grid.arrange(
+  ggplot(vietnam, aes(x = AttractInfo)) +
+    geom_histogram(stat = "density"),
+  ggplot(vietnam, aes(x = SuffInfo)) +
+    geom_histogram(stat = "density"),
+  ggplot(vietnam, aes(x = ImpressInfo)) +
+    geom_histogram(stat = "density"),
+  ggplot(vietnam, aes(x = PopularInfo)) +
+    geom_histogram(stat = "density"),
+  ggplot(vietnam, aes(x = Assurance)) +
+    geom_histogram(stat = "density"),
+  ggplot(vietnam, aes(x = Reliability)) +
+    geom_histogram(stat = "density"),
+  ggplot(vietnam, aes(x = Empathy)) +
+    geom_histogram(stat = "density"),
+  ncol = 4, nrow = 2
+)
+```
+
+
+```{r}
+Proportion_AttractInfo <- vietnam %>% group_by(AttractInfo) %>%
+  summarize(Proportion = sum(greaterthan12 == "yes") / n())
+
+Proportion_SuffInfo <- vietnam %>% group_by(SuffInfo) %>%
+  summarize(Proportion = sum(greaterthan12 == "yes") / n())
+
+Proportion_ImpressInfo <- vietnam %>% group_by(ImpressInfo) %>%
+  summarize(Proportion = sum(greaterthan12 == "yes") / n())
+
+Proportion_PopularInfo <- vietnam %>% group_by(PopularInfo) %>%
+  summarize(Proportion = sum(greaterthan12 == "yes") / n())
+
+Proportion_Assurance <- vietnam %>% group_by(Assurance) %>%
+  summarize(Proportion = sum(greaterthan12 == "yes") / n())
+
+Proportion_Reliability <- vietnam %>% group_by(Reliability) %>%
+  summarize(Proportion = sum(greaterthan12 == "yes") / n())
+
+Proportion_Empathy <- vietnam %>% group_by(Empathy) %>%
+  summarize(Proportion = sum(greaterthan12 == "yes") / n())
+
+ggarrange(
+  ggplot(Proportion_AttractInfo, aes(x = as.numeric(AttractInfo), y = Proportion, fill = as.numeric(AttractInfo))) +
+    geom_bar(stat = "identity") +
+    theme(legend.position = "none") +
+    labs(x = "Rating", y = "Proportion of People it has been > 12 Months", title = "Attractiveness"),
+  ggplot(Proportion_SuffInfo, aes(x = as.numeric(SuffInfo), y = Proportion, fill = as.numeric(SuffInfo))) +
+    geom_bar(stat = "identity") +
+    theme(legend.position = "none") +
+    labs(x = "Rating", y = "Proportion of People it has been > 12 Months", title = "Sufficiency"),
+  ggplot(Proportion_ImpressInfo, aes(x = as.numeric(ImpressInfo), y = Proportion, fill = as.numeric(ImpressInfo))) +
+    geom_bar(stat = "identity") +
+    theme(legend.position = "none") +
+    labs(x = "Rating", y = "Proportion of People it has been > 12 Months", title = "Impression"),
+  ggplot(Proportion_PopularInfo, aes(x = as.numeric(PopularInfo), y = Proportion, fill = as.numeric(PopularInfo))) +
+    geom_bar(stat = "identity") +
+    theme(legend.position = "none") +
+    labs(x = "Rating", y = "Proportion of People it has been > 12 Months", title = "Popularity"),
+  ggplot(Proportion_Assurance, aes(x = as.numeric(Assurance), y = Proportion, fill = as.numeric(Assurance))) +
+    geom_bar(stat = "identity") +
+    theme(legend.position = "none") +
+    labs(x = "Rating", y = "Proportion of People it has been > 12 Months", title = "Assurance"),
+  ggplot(Proportion_Reliability, aes(x = as.numeric(Reliability), y = Proportion, fill = as.numeric(Reliability))) +
+    geom_bar(stat = "identity") +
+    theme(legend.position = "none") +
+    labs(x = "Rating", y = "Proportion of People it has been > 12 Months", title = "Reliability"),
+  ggplot(Proportion_Empathy, aes(x = as.numeric(Empathy), y = Proportion, fill = as.numeric(Empathy))) +
+    geom_bar(stat = "identity") +
+    theme(legend.position = "none") +
+    labs(x = "Rating", y = "Proportion of People it has been > 12 Months", title = "Empathy"),
+  ncol = 4, nrow = 2
+)
+```
+
+
+```{r}
+
+mod1 <- glm(howlong ~ as.factor(AttractInfo) + as.factor(SuffInfo) +
+              as.factor(ImpressInfo) + as.factor(PopularInfo) +
+              as.factor(Assurance) +
+              as.factor(Reliability) + as.factor(Empathy) +
+              Sex + Jobstt + MaritalStt + Edu + place + BMI + HealthIns +
+              Wsttime + Wstmon + DiscDisease + Lessbelqual + 
+              NotImp + HthyPriority +
+              ComSubsidy + Habit + FlwHealth + PerTrmt + AcqTrmt +
+              StabHthStt + MedCabinet + ExamTools + ExpCare + UseMon +
+              as.factor(Tangibles) + as.factor(Respon) + StChoise +
+              CHPerc + SuitFreq + AffCost + UseIT + AfterIT + SuitExer + EvalExer + Age_gr, 
+            family = binomial(link = "probit"), data = vietnam)
+summary(mod1)
+
+plot(mod1)
+
+vietnam$pred1 <- predict(mod1, type = "response")
+ggplot(vietnam, aes(x = pred1, y = howlong)) +
+  geom_point(alpha = 0.25) +
+  geom_smooth(method = "loess", se = FALSE)
+
+# Make a confusion matrix for the model
+table(vietnam$howlong, vietnam$pred1 > 0.5)
+# Calculate percentage of accuracte predictions
+mean(vietnam$howlong == (vietnam$pred1 > 0.5))
+
+```
+
+
+```{r}
+# Assuming mod1 is your full model
+full_model <- mod1
+
+# List of all variables in the model
+variables <- c("as.factor(AttractInfo)", "as.factor(SuffInfo)", "as.factor(ImpressInfo)", 
+               "as.factor(PopularInfo)", "as.factor(Assurance)", "as.factor(Reliability)", 
+               "as.factor(Empathy)")
+
+# Initialize a vector to store p-values
+p_values <- numeric(length(variables))
+
+# Loop over each variable and perform partial F-test
+for (i in seq_along(variables)) {
+  var <- variables[i]
+
+  # Create the formula string for the reduced model
+  reduced_formula_str <- paste("howlong ~", paste(variables[variables != var], collapse = " + "))
+  
+  # Convert the string to a formula
+  reduced_formula <- as.formula(reduced_formula_str)
+
+  # Fit the reduced model
+  reduced_model <- glm(reduced_formula, family = binomial(link = "logit"), data = vietnam)
+  
+  # Compare the full model with the reduced model
+  test <- anova(full_model, reduced_model, test="Chisq")
+  
+  # Extract the p-value and store it
+  p_values[i] <- test$`Pr(>Chi)`[2] # assuming the second row contains the relevant p-value
+}
+
+# Combine the variables and their p-values
+variable_importance <- data.frame(Variable = variables, P_Value = p_values)
+
+# Rank the variables by p-value
+ranked_variables <- variable_importance[order(variable_importance$P_Value), ]
+
+# Display the ranked variables
+ranked_variables
+```
+
+
+# Question 3
+
+```{r}
+# Fit the model with interaction terms
+interaction_model <- glm(howlong ~ (as.factor(AttractInfo) + as.factor(SuffInfo) +
+                                    as.factor(ImpressInfo) + as.factor(PopularInfo) +
+                                    as.factor(Assurance) + as.factor(Reliability) +
+                                    as.factor(Empathy)):StabHthStt + Sex + Jobstt + MaritalStt +
+                                    Edu + place + BMI + HealthIns + Wsttime + Wstmon +
+                                    DiscDisease + Lessbelqual + NotImp + HthyPriority +
+                                    ComSubsidy + Habit + FlwHealth + PerTrmt + AcqTrmt  + 
+                           MedCabinet + ExamTools + ExpCare +
+                                    UseMon + as.factor(Tangibles) + as.factor(Respon) +
+                                    StChoise + CHPerc + SuitFreq + AffCost + UseIT +
+                                    AfterIT + SuitExer + EvalExer + Age_gr,  
+                                  family = binomial(link = "probit"), data = vietnam)
+
+# Summarize the model to see the results
+summary(interaction_model)
+
+```
+
+
