@@ -1,0 +1,787 @@
+---
+title: "Final Project"
+author: "Vinay Maruri"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+```
+#PART 1
+
+#SHANE THIS IS WHERE I GOT MY PLOTS/STUFF I USED FOR PART 1
+
+```{r}
+vh <- read.csv("vietnam-health.csv")
+```
+
+Question 1
+
+```{r}
+#suffinfo, attractinfo, popularinfo, impressinfo
+q1 <- vh[, 44:47]
+summary(q1)
+```
+
+```{r}
+tbl <- psych::describe(q1)
+tbl <- tbl[, c(2:5, 8:9)]
+rownames(tbl) <- c("Sufficiency", "Attractiveness", "Impressiveness", "Popularity")
+colnames(tbl) <- c("N", "Mean", "Standard Deviation", "Median", "Minimum", "Maximum")
+```
+
+```{r}
+q12 <- vh[, c(34, 36, 37)]
+summary(q12)
+tbl2 <- psych::describe(q12)
+tbl2 <- tbl2[, c(2:5, 8:9)]
+colnames(tbl2) <- c("N", "Mean", "Standard Deviation", "Median", "Minimum", "Maximum")
+```
+
+QUESTION 2
+
+```{r}
+defined <- subset(vh, RecPerExam != "unknow")
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, HealthIns) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = HealthIns)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, Sex) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = Sex)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, Jobstt) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = Jobstt)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, MaritalStt) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = MaritalStt)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, Edu) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = Edu)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, place) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = place)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, ReaExam) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = ReaExam)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, Wsttime) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = Wsttime)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, Wstmon) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = Wstmon)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, DiscDisease) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = DiscDisease)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, Lessbelqual) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = Lessbelqual)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, NotImp) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = NotImp)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, HthyPriority) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = HthyPriority)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, ComSubsidy) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = ComSubsidy)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, Habit) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = Habit)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, FlwHealth) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = FlwHealth)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, PerTrmt) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = PerTrmt)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, AcqTrmt) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = AcqTrmt)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = StabHthStt)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, MedCabinet) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = MedCabinet)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, Tooluseskills) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = Tooluseskills)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, ExpCare) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = ExpCare)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, ExamTools) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = ExamTools)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, UseMon) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = UseMon)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StChoise) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = StChoise)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, CHPerc) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = CHPerc)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, SuitFreq) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = SuitFreq)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, AffCost) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = AffCost)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, UseIT) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = UseIT)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, AfterIT) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = AfterIT)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, EvalExer) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, fill = EvalExer)) + geom_col()
+```
+
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, HealthIns) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = HealthIns)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, Sex) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = Sex)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, Jobstt) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = Jobstt)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, MaritalStt) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = MaritalStt)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, Edu) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = Edu)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, place) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = place)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, ReaExam) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = ReaExam)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, Wsttime) %>% count()
+```
+
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = Wsttime)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, Wstmon) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = Wstmon)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, DiscDisease) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = DiscDisease)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, Lessbelqual) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = Lessbelqual)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, NotImp) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = NotImp)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, HthyPriority) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = HthyPriority)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, ComSubsidy) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = ComSubsidy)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, Habit) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = Habit)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, FlwHealth) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = FlwHealth)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, PerTrmt) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = PerTrmt)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, AcqTrmt) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = AcqTrmt)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = StabHthStt)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, MedCabinet) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = MedCabinet)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, Tooluseskills) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = Tooluseskills)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, ExpCare) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = ExpCare)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, ExamTools) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = ExamTools)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, UseMon) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = UseMon)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, StChoise) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = StChoise)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, CHPerc) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = CHPerc)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, SuitFreq) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = SuitFreq)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, AffCost) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = AffCost)) + geom_col()
+```
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, UseIT) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = UseIT)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, AfterIT) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = AfterIT)) + geom_col()
+```
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, EvalExer) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = EvalExer)) + geom_col()
+```
+
+
+
+```{r}
+tmp <- defined %>% group_by(RecPerExam, StabHthStt, EvalExer) %>% count()
+```
+
+
+```{r}
+ggplot(tmp, aes(x = RecPerExam, y = n, col = StabHthStt, fill = EvalExer)) + geom_col()
+```
+
+
+
+#EDA: note missing values and values that will be dropped
+
+
+```{r}
+vietnam <- read_csv("~/linear_models/final/vietnam-health.csv")
+viet_missing <- vietnam %>%
+  filter(RecExam != "unknow") %>%
+  filter(RecPerExam != "unknow") %>% 
+  filter(SuitExer != "unknown") %>% 
+  filter(CHPerc != "unknown")
+```
+
+```{r}
+vietnam2 <- vietnam %>%
+  filter(RecExam == "unknow" | RecPerExam == "unknow" | SuitExer == "unknown" | CHPerc == "unknown")
+```
+
+
+#PART 2
+
+#SHANE THIS IS WHERE MY PART 3 STUFF IS
+
+Analysis Approach:
+
+Univariate Analysis: Start by examining each covariate individually to understand its distribution within the group that has exceeded the 12-month checkup interval. This provides a preliminary overview of potential associations.
+
+Multivariate Analysis: Perform multivariate analysis by considering all relevant covariates together. This approach allows us to identify interactions and assess the combined impact of multiple factors on the probability of getting a check-up.
+
+Quantifying Effects: Utilize logistic regression to quantify the effects of each covariate on the probability of getting a check-up. The odds ratio can be a useful measure to communicate the impact, indicating how the odds of getting a check-up change with each unit increase in the covariate.
+
+Comparing Effects: Compare the odds ratios of different covariates to determine their relative importance in influencing the probability of getting a check-up. This comparison helps in identifying the most impactful factors.
+
+The formal analysis should involve a combination of univariate and multivariate approaches, employing logistic regression to quantify the effects. The odds ratio becomes a key metric for communication, allowing a straightforward comparison of the influence of different covariates. By systematically examining these factors, we can provide valuable insights into whether health issues or family health history significantly impact individuals' decisions to undergo regular health check-ups.
+
+
+```{r}
+vietnam <- vietnam %>%
+  mutate(howlong = ifelse(greaterthan12 == "yes", 1, 0)) %>%
+  filter(HealthImp != "unknown") 
+```
+
+```{r}
+vietnam <- vietnam %>%
+  group_by(id, date) %>%
+  mutate(
+    perceptionMean = sum(AttractInfo + SuffInfo + ImpressInfo + PopularInfo)/4,
+    compassionMean = sum(Assurance + Reliability + Empathy)/3
+  )
+```
+
+```{r}
+mod1 <- lm(howlong ~ perceptionMean + compassionMean + Age_gr + Insurance + Waste + HealthImp + DiscDisease + Lessbelqual, data = vietnam)
+summary(mod1)
+```
+
+```{r}
+full_model <- glm(howlong ~ Age + Sex + Jobstt + MaritalStt + Edu + height + weight + place + BMI + HealthIns + Wsttime + Wstmon + DiscDisease + ComSubsidy + Habit + FlwHealth + PerTrmt + AcqTrmt + StabHthStt + MedCabinet + Tooluseskills + ExpCare + ExamTools + UseMon + Tangibles + Reliability + Respon + Assurance + Empathy + StChoise + CHPerc + SuitFreq + AffCost + UseIT + AfterIT + SuffInfo + AttractInfo + ImpressInfo + PopularInfo + SuitExer + EvalExer + Age_gr, data = vietnam, family = "binomial")
+summary(full_model)
+```
+#interactions of stable health status:
+
+```{r}
+interaction.plot(x.factor = vietnam$perceptionMean, 
+                 trace.factor = vietnam$StabHthStt, 
+                 response = vietnam$howlong)
+```
+
+
+```{r}
+interaction.plot(x.factor = vietnam$compassionMean, 
+                 trace.factor = vietnam$StabHthStt, 
+                 response = vietnam$howlong)
+```
+
+```{r}
+summary(aov(howlong ~ perceptionMean*StabHthStt, data = vietnam))
+```
+```{r}
+summary(aov(howlong ~ perceptionMean*StabHthStt, data = vietnam))
+```
+
+```{r}
+summary(aov(howlong ~ Age_gr*StabHthStt, data = vietnam))
+```
+
+```{r}
+summary(aov(howlong ~ HealthImp*StabHthStt, data = vietnam))
+```
+
+poly(perceptionmean, 4) bs(compassionmean, knots = c(2, 3, 4)) stabhthstthealthimp waste insurance lessbelqual sex age_gr 
+
+```{r}
+summary(aov(howlong ~ perceptionMean + compassionMean + StabHthStt + HealthImp + Waste + Insurance + Lessbelqual + Sex + Age_gr + StabHthStt*compassionMean, data = vietnam))
+```
+
+
+```{r}
+summary(aov(howlong ~ perceptionMean + compassionMean + StabHthStt + HealthImp + Waste + Insurance + Lessbelqual + Sex + Age_gr + StabHthStt*perceptionMean, data = vietnam))
+```
+
+```{r}
+model = glm(howlong ~ perceptionMean + compassionMean + StabHthStt + HealthImp + Waste + Insurance + Lessbelqual + Sex + Age_gr + StabHthStt*compassionMean + StabHthStt*perceptionMean, data = vietnam, family = binomial(link = "logit"))
+summary(model)
+```
+
+
+```{r}
+model = glm(howlong ~ perceptionMean + compassionMean + StabHthStt + HealthImp + Waste + Insurance + Lessbelqual + Sex + Age_gr + StabHthStt*compassionMean + StabHthStt*perceptionMean, data = vietnam, family = binomial(link = "logit"))
+summary(model)
+```
+
+```{r}
+model = glm(howlong ~ perceptionMean + compassionMean + StabHthStt + StabHthStt*compassionMean + StabHthStt*perceptionMean, data = vietnam, family = binomial(link = "logit"))
+summary(model)
+```
+
+
